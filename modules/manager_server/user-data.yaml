@@ -1,0 +1,34 @@
+#cloud-config
+
+users:
+  - name: ansible
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    lock_passwd: true
+    groups: wheel
+    passwd: $1$UpHnuQw2$exHMtb2c5KNtBAWcaz1Ik1
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC0N2MplsDdKV/MwUBtzuIeM7FQtoX4hF8k454SjiD8EXSSpM4yCm7RtPqWsLMfOWGAfp/I+fpd2y0bVbWwhyis+sn4tj5KT2xNdF2T37pwpBifa01dVCJHroKG8o+PuJ73c2gVxiu3k47wqj2jkzovCE4y3xuFGiDjNFHWCnlHvsd7Pr+Bq6I3HTXl6w+jftXbXunzNpkmXFRE/4ShCAmHldDFgi2sZwrJyPsGLbvwDQlz4OmR1OnRLx7wXeHPubGcPR+WyfTFnQa3LCuXCW7NyQiTufnjJ7s5MQH6IaU89yO+POomrRcWM61slx1L/p6UDnXCdnwo0NkHmvtUg7qUxf3Dr1T4jw8DBUH+T3/dDLYFfuHuXM5Dcg1+zaZF20EKrxZWlKJAE/ahCgGokLpilYOpZy0oZNvdU5aNbO9aLso7hYSeUEBsBJRbip3uOwDIx8qTYMW5egGlmD5uYSocCAtoyL6A+IcambYVKGT+SPTJvWiaYJK+JSD2nISuUDe1kXrwaucQfDe9gAWZr9sR7/mmLNw63cwtCyVpxS46ygqX9FaZjOBajvXEZtw6lm5AEwPQlEq/40UdX+x+pF17ug0vtSkMMXVviT4s42gzGRckz4eILwa1P/qTX3myhSkH7WUmWsxdi/23fpANzaBAPx72BtCX0SS+2gmQDbNalQ== j.crouch@mbr-jeremiahcrouch.local
+
+repo_upgrade: true
+
+runcmd:
+  - [ sh, -c, "sudo yum update -y" ]
+  - [ sh, -c, "sudo yum upgrade python*" ]
+  - [ sh, -c, "sudo yum install python-setuptools" ]
+  - [ sh, -c, "sudo easy_install pip" ]
+  - [ sh, -c, "sudo pip install docker-py" ]
+  - [ sh, -c, "sudo yum remove docker docker-common docker-selinux docker-engine" ]
+  - [ sh, -c, "sudo yum install -y yum-utils device-mapper-persistent-data lvm2" ]
+  - [ sh, -c, "sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo" ]
+  - [ sh, -c, "sudo yum install -y docker-ce" ]
+  - [ sh, -c, "sudo systemctl enable docker" ]
+  - [ sh, -c, "sudo systemctl start docker" ]
+
+timezone: Europe/Amsterdam
+
+power_state:
+  delay: "+30"
+  mode: reboot
+  message: Bye Bye
+  timeout: 60
+  condition: True

@@ -1,0 +1,9 @@
+variable "facility" {}
+variable "project_id" {}
+variable "hostname" {}
+variable "plan" {}
+variable "manager_count" {}
+variable "worker_count" {}
+variable "swarm_ip" {}
+variable "packet_api_key" {}
+variable "swarm_manager_token" {}
